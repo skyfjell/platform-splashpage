@@ -1,0 +1,149 @@
+# Default values for platform-splashpage.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  # The url where this will be running
+  url: ""
+  # html page metadata
+  pageMetadata:
+    # HTML Page title
+    title: ""
+    # Html Page description
+    description: ""
+  auth:
+    # Cookie secrets
+    # Create with ``
+    cookieSecret: "" # do not use in production
+    # cookieSecretRef: ""
+    providers:
+      {}
+      # any type supported by next-auth
+      # that is a simple oauth provider
+      # that needs only
+      # - clientId
+      # - clientSecret
+      # - issuer (optional)
+      #
+      # This rules out stuff like Email, AzureADB2C etc
+      # for now.
+      # providers:
+      #   keycloak:
+      #     clientId: "myapp"
+      #     issuer: "123"
+      #     clientSecret: "123" # do not use in production
+      #     clientSecretRef:
+      #       key: ""
+      #       name: ""
+      #   google:
+      #    clientId: ""
+      #    clientSecret: "" # do not use in production
+      #    clientSecretRef:
+      #      key: ""
+      #      name: ""
+      #
+      # ...
+  apps:
+    []
+    # - name: privateBin
+    #   displayName: privateBin
+    #   link: "https://privatebin.myhost.com"
+    #   icon: "privatebin.svg"
+    #   auth:
+    #     - groups: ["pb"]
+  publicFolder:
+    # loading files into public folder via configmap
+    # Optional, can use extraVolume/Mounts to describe
+    # your own way to load public assets.
+    #
+    # You can always hard code icon urls to static images
+    # or use
+    configMap:
+      name: ""
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraEnv: []
+
+extraVolumes: []
+extraVolumeMounts: []

@@ -1,0 +1,28 @@
+{
+    "apps": [
+        {
+            "name": "Jupyterhub",
+            "icon": "jupyterhub.svg",
+            "link": "www.jupyterhub.com"
+        },
+        {
+            "name": "Gitlab",
+            "icon": "gitlab.svg",
+            "displayName": "Gitlab",
+            "link": "www.gitlab.com"
+        }
+    ],
+    "auths": [
+        {
+            "name": "keycloak",
+            "type": "keycloak",
+            "clientId": "splash",
+            "issuer": "http://keycloak:8080/realms/master"
+        }
+    ],
+    "pageMetadata": {
+        "title": "Test",
+        "description": "Test"
+    },
+    "url": "http://localhost:3000"
+}

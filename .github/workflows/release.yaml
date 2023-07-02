@@ -50,6 +50,7 @@ jobs:
           TAG=${{ github.ref_name }}
           FOLDER=/tmp/charts
           BRANCH_NAME="platform-splashpage-$TAG"
+          CURRENT="$(pwd)"
 
           git clone \
             --depth=1 \
@@ -62,7 +63,7 @@ jobs:
           git config user.name "Platform Splashpage Bot"
           git checkout -b "platform-splashpage-$TAG"
 
-          cp -R ../../../charts/* charts
+          cp -R $CURRENT/charts/* charts
 
           git add .
           git commit -m "platform-splashpage-$TAG"

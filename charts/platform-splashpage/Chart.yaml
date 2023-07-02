@@ -2,5 +2,9 @@ apiVersion: v2
 name: platform-splashpage
 description: A Helm chart for Simple Platform Splashpages
 type: application
-version: 0.1.0
-appVersion: "0.1.0"
+version: 0.0.1 # set by ci
+appVersion: "0.0.1" # set by ci
+dependencies:
+  - name: common
+    repository: "@skyfjell"
+    version: "0.0.x"

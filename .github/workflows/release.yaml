@@ -1,0 +1,80 @@
+on:
+  push:
+    tags:
+      - "*"
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+jobs:
+  build-release-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: platform-splashpage
+          file: ./platform-splashpage/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  release-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.34.1
+        with:
+          cmd: yq eval -i '(.appVersion = "${{ github.ref_name }}") | (.version = ${{ github.ref_name }}")' charts/platform-splashpage/Chart.yaml
+      - name: Chart repo pr
+        run: |
+          REPOSITORY="git@github.com:skyfjell/charts.git"
+          TAG=${{ github.ref_name }}
+          FOLDER=/bin/charts
+          BRANCH_NAME="platform-splashpage-$TAG"
+
+          git clone \
+            --depth=1 \
+            --branch=main \
+            $REPOSITORY \
+            $FOLDER
+
+          cd $FOLDER
+          git config user.email "bot@skyfjell.io"
+          git config user.name "Platform Splashpage Bot"
+          git checkout -b "platform-splashpage-$TAG"
+
+          cp -R ../../../charts/* charts
+
+          git add .
+          git commit -m "platform-splashpage-$TAG"
+          git push origin $BRANCH_NAME
+
+          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title "chore: update platform-splashpage chart to $TAG" \
+            --head "$BRANCH_NAME" \
+            --base "main"

@@ -18,6 +18,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "platform-splashpage.labels" . | nindent 4 }}
+    {{- include "skyfjell.common.chartLabels" $ | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

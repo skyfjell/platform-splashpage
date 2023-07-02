@@ -46,9 +46,9 @@ jobs:
           cmd: yq eval -i '(.appVersion = "${{ github.ref_name }}") | (.version = "${{ github.ref_name }}")' charts/platform-splashpage/Chart.yaml
       - name: Chart repo pr
         run: |
-          REPOSITORY="git@github.com:skyfjell/charts.git"
+          REPOSITORY="https://github.com/skyfjell/charts.git"
           TAG=${{ github.ref_name }}
-          FOLDER=/bin/charts
+          FOLDER=/tmp/charts
           BRANCH_NAME="platform-splashpage-$TAG"
 
           git clone \

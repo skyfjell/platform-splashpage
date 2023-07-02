@@ -48,7 +48,7 @@ jobs:
         run: |
           REPOSITORY="git@github.com:skyfjell/charts.git"
           TAG=${{ github.ref_name }}
-          FOLDER=/bin/charts
+          FOLDER=/tmp/charts
           BRANCH_NAME="platform-splashpage-$TAG"
 
           git clone \

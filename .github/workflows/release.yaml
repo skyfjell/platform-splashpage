@@ -43,7 +43,7 @@ jobs:
       - name: yq - portable yaml processor
         uses: mikefarah/yq@v4.34.1
         with:
-          cmd: yq eval -i '(.appVersion = "${{ github.ref_name }}") | (.version = ${{ github.ref_name }}")' charts/platform-splashpage/Chart.yaml
+          cmd: yq eval -i '(.appVersion = "${{ github.ref_name }}") | (.version = "${{ github.ref_name }}")' charts/platform-splashpage/Chart.yaml
       - name: Chart repo pr
         run: |
           REPOSITORY="git@github.com:skyfjell/charts.git"

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { SplashConfig } from "../config";
 import {
   Box,
@@ -66,7 +67,7 @@ export default function App({
             <Grid key={idx} sx={{ margin: 2.5, display: "flex" }}>
               <Paper sx={{ padding: 2.5, textAlign: "center" }}>
                 <Tooltip title={link}>
-                  <img style={{ width: 150 }} src={icon} alt={name} />
+                  <Image style={{ width: 150 }} src={icon} alt={name} />
                 </Tooltip>
                 <Typography component="div" variant="h5">
                   {displayName ?? ""}
